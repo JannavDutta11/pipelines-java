@@ -14,13 +14,20 @@ stages:
     steps:
     - script: chmod +x gradlew
       displayName: Make Gradle executable
- 
+    
     - task: Gradle@3
       inputs:
         gradleWrapperFile: 'gradlew'
         tasks: 'clean build'
         publishJUnitResults: true
         testResultsFiles: '**/TEST-*.xml'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'build/libs'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'  
+     
  
 #  Stage 2: Test
 - stage: Test
@@ -34,6 +41,7 @@ stages:
     steps:
     - script: echo "Running additional tests..."
       displayName: Dummy Test Step
+  
  
 #  Stage 3: Deploy
 - stage: Deploy
@@ -48,3 +56,4 @@ stages:
     - script: echo "Deploying application..."
       displayName: Dummy Deploy Step
  
+
